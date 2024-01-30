@@ -59,4 +59,5 @@ pip install copy
 
 
 ### [make XML](make_XML.py)
+このファイルでは、得られた運指情報をmusicxml形式に変換する。
 
