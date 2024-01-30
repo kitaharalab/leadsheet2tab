@@ -11,6 +11,8 @@ pip install music21
 pip install copy
 ```
 
+music21のインストールの詳細は、[こちら](https://zenn.dev/kthrlab_blog/articles/1686fd19dab5b9)から見て頂きたい。
+
 ## 説明
 各Pythonファイルの役割と、ファイル内の主要な関数の説明を記載する。
 
