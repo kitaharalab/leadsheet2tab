@@ -1,7 +1,7 @@
 from add_state import *
 
 # 状態作成
-def make_observe(fr):# 2箇所(2音+開放弦)まで:18112個
+def makeObserve(fr):# 2箇所(2音+開放弦)まで:18112個
     lf = 2
     states = []
     tf = temp_forms(fr) # 典型フォームを作成する関数
@@ -17,11 +17,9 @@ def make_observe(fr):# 2箇所(2音+開放弦)まで:18112個
                                 states.append(m)
                             # 押弦箇所が1箇所（1音のみ or 1音+開放弦）
                             elif len(list(set(m))) <= 3 and sum(i > 0 for i in m) <= 1:
-                            # elif m.count(-1) == 5 or (m.count(-1) == 4 and min2nd(m) == 0):
                                 states.append(m)
                             # 押弦箇所が2箇所（2音のみ or 2音+開放弦）
                             elif len(list(set(m))) <= 4 and sum(i > 0 for i in m) <= 2:
-                            # elif m.count(-1) == 4 or (m.count(-1) == 3 and min2nd(m) == 0):
                                 n = sorted(list(set(m)))
                                 if len(n) == 4:
                                     if abs(n[-1]-n[-2]) <= lf: # 1箇所のフレット位置が○以内なら
@@ -228,5 +226,5 @@ def guitar_frets():
         [("A3", 45, 0),    ("A#3", 46, 1), ("B-3", 46, 1), ("B3" , 47, 2),                 ("C4" , 48, 3),                 ("C#4", 49, 4), ("D-4", 49, 4), ("D4", 50, 5), ("D#4", 51, 6), ("E-4", 51, 6), ("E4" , 52, 7),                 ("F4" , 53, 8),                 ("F#4", 54, 9), ("G-4", 54, 9), ("G4", 55, 10), ("G#4", 56, 11), ("A-4", 56, 11), ("A4", 57, 12), ("A#4", 58, 13), ("B-4", 58, 13), ("B4" , 59, 14)                ,("C5" , 60, 15),                  ("rest", -1, -1)],
         [("E3", 40, 0),    ("F3" , 41, 1),                 ("F#3", 42, 2), ("G-3", 42, 2), ("G3" , 43, 3),                 ("G#3", 44, 4), ("A-3", 44, 4), ("A3", 45, 5), ("A#3", 46, 6), ("B-3", 46, 6), ("B3" , 47, 7),                 ("C4" , 48, 8),                 ("C#4", 49, 9), ("D-4", 49, 9), ("D4", 50, 10), ("D#4", 51, 11), ("E-4", 51, 11), ("E4", 52, 12), ("F4" , 53, 13),                  ("F#4", 54, 14), ("G-4", 54,14),("G4" , 55, 15),                  ("rest", -1, -1)]
     ]
-    sf_state, ttf = make_observe(fr=14)
+    sf_state, ttf = makeObserve(fr=14)
     return frets, sf_state, ttf

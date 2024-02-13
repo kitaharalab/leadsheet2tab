@@ -21,7 +21,6 @@ def transmatCost(now_s, next_s):
     # コードと単音、コードとコードなら弦同士の移動距離を比較
     # 単音同士ならフレット移動距離を比較
     
-    # lfFret以上離れていたら大きな値を設定したい
     lf = 4
     def is_monophony(mel, s_mel):
         return len(s_mel) == 1 and mel.count(s_mel[0]) == 1
@@ -53,7 +52,6 @@ def transmatCost(now_s, next_s):
                 return 0.0
             else:
                 return dist
-        # return dist
         elif b_min > lf:
             return dist + 5.0
         else:
@@ -72,7 +70,6 @@ def transmatCost(now_s, next_s):
                     return 0.0
                 else:
                     return dist
-            # return dist
             elif b_min > lf:
                 return dist + 5.0
             else:
@@ -101,25 +98,39 @@ def transmatCost(now_s, next_s):
 def emmisionCost(st, ob, sc, frets, tf):
     # print("in emmision_prob")
     st_name = states2noteName(st, sc, frets)
+    st_ind = [st.index(i) for i in st if i > -1]# 何弦で演奏されるか
     if ob[-1] == "chord":
         if ob[1] >= 2.0:# 音価が2以上
             if sum(1 for i in st if i > -1) >= 3:# 3音以上
                 if st in tf:# 典型フォームに含まれれば
                     if sum(1 for i in st if i > -1) >= 5:
-                        emmision = 0.0
+                        # 1,2弦で主旋律を演奏可能なら
+                        if st_ind[0] == 0: emmision = 0.0
+                        elif st_ind[0] == 1: emmision = 2.0
+                        else: emmision = 10.0
                     elif sum(1 for i in st if i > -1) == 4:
-                        emmision = 2.0
+                        if st_ind[0] == 0: emmision = 2.0
+                        elif st_ind[0] == 1: emmision = 4.0
+                        else: emmision = 10.0
                     elif sum(1 for i in st if i > -1) == 3:
-                        emmision = 4.0
+                        if st_ind[0] == 0: emmision = 4.0
+                        elif st_ind[0] == 1: emmision = 6.0
+                        else: emmision = 10.0
                     else:
                         emmision = 100.0
                 else:# 典型フォームにない
                     if sum(1 for i in st if i > -1) >= 5:
-                        emmision = 2.0
+                        if st_ind[0] == 0: emmision = 2.0
+                        elif st_ind[0] == 1: emmision = 4.0
+                        else: emmision = 10.0
                     elif sum(1 for i in st if i > -1) == 4:
-                        emmision = 4.0
+                        if st_ind[0] == 0: emmision = 4.0
+                        elif st_ind[0] == 1: emmision = 6.0
+                        else: emmision = 15.0
                     elif sum(1 for i in st if i > -1) == 3:
-                        emmision = 6.0
+                        if st_ind[0] == 0: emmision = 6.0
+                        elif st_ind[0] == 1: emmision = 8.0
+                        else: emmision = 15.0
                     else:
                         emmision = 100.0
             else:# 3音未満は高コスト
@@ -128,24 +139,40 @@ def emmisionCost(st, ob, sc, frets, tf):
             if sum(1 for i in st if i > -1) <= 4:# 5音以下
                 if st in tf:# 典型フォームに含まれれば
                     if sum(1 for i in st if i > -1) == 4:
-                        emmision = 2.0
+                        if st_ind[0] == 0: emmision = 2.0
+                        elif st_ind[0] == 1: emmision = 4.0
+                        else: emmision = 10.0
                     elif sum(1 for i in st if i > -1) == 3:
-                        emmision = 4.0
+                        if st_ind[0] == 0: emmision = 4.0
+                        elif st_ind[0] == 1: emmision = 6.0
+                        else: emmision = 10.0
                     elif sum(1 for i in st if i > -1) == 2:
-                        emmision = 6.0
+                        if st_ind[0] == 0: emmision = 6.0
+                        elif st_ind[0] == 1: emmision = 8.0
+                        else: emmision = 15.0
                     elif sum(1 for i in st if i > -1) == 1:
-                        emmision = 8.0
+                        if st_ind[0] == 0: emmision = 8.0
+                        elif st_ind[0] == 1: emmision = 10.0
+                        else: emmision = 15.0
                     else:
                         emmision = 100.0
                 else:# 典型フォームにない
                     if sum(1 for i in st if i > -1) == 4:
-                        emmision = 4.0
+                        if st_ind[0] == 0: emmision = 4.0
+                        elif st_ind[0] == 1: emmision = 6.0
+                        else: emmision = 15.0
                     elif sum(1 for i in st if i > -1) == 3:
-                        emmision = 6.0
+                        if st_ind[0] == 0: emmision = 6.0
+                        elif st_ind[0] == 1: emmision = 8.0
+                        else: emmision = 15.0
                     elif sum(1 for i in st if i > -1) == 2:
-                        emmision = 8.0
+                        if st_ind[0] == 0: emmision = 8.0
+                        elif st_ind[0] == 1: emmision = 10.0
+                        else: emmision = 15.0
                     elif sum(1 for i in st if i > -1) == 1:
-                        emmision = 10.0
+                        if st_ind[0] == 0: emmision = 10.0
+                        elif st_ind[0] == 1: emmision = 12.0
+                        else: emmision = 20.0
                     else:
                         emmision = 100.0
             else:# どれにも当てはまらない
@@ -198,7 +225,6 @@ def rest2Chord(ob, states, sc, frets, tf):
         C = [x[:-1] for x in n]
         if set(C).issubset(set(ob)):
             # n_ = [note.Note(x) for x in n]# 状態をnote型で扱えるように変換
-            # if ob[0] == n_[0] and max(n_) == ob[0] and n[-1][:-1] == ob[1]:
             if item in tf and len(list(set(n))) == len(n):
                 li.append(item)
     return li
@@ -206,20 +232,20 @@ def rest2Chord(ob, states, sc, frets, tf):
 # 状態が発音する音名を配列で返す
 def states2noteName(l, sc, frets):
     ans = []
-    # print("st: {}".format(l))
     for i in range(len(l)):
         if l[i] == -1:
             continue
         else:
             string, fret = i, l[i]
             n = [k[0] for k in frets[string] if k[2] == fret]
-            # print(n)
             if len(n) == 2:
                 n_ = [item for item in n if item[:-1] in sc]
-                # print(" ",n_)
-                if n_: ans.append(n_[0])
-                else: ans.append(n[0])
-            else: ans.append(n[0])
+                if n_:
+                    ans.append(n_[0])
+                else:
+                    ans.append(n[0])
+            else:
+                ans.append(n[0])
     if not ans:
         ans.append("rest")
     return ans
@@ -229,12 +255,10 @@ def viterbi(observes, states, frets, tf):
     """viterbi algorithm
     Output : labels estimated"""
     scale_name = observes[0][1]
-    # print("SCALE: {}".format(sc))
-    # print("first: {}".format(observes[1]))
     T = {} # present state
     for st in states:
         T[states.index(st)] = (startCost(st) + emmisionCost(st, observes[1], scale_name, frets, tf), [st])
-    # print("T: {}\n".format(T))
+
     i, j = 1, 2
     now_ob = observes[i]
     while i <= len(observes) and j <= len(observes[1:]):
@@ -257,7 +281,6 @@ def viterbi(observes, states, frets, tf):
     
     prob, labels = min([T[st] for st in T])
     
-    # print("T(result):{}\n".format(T))
     return prob,labels
 
 # ビタビアルゴリズムの途中部分
@@ -284,7 +307,6 @@ def next_state(now_ob, next_ob, states, sc, T, frets, tf):
             p = T[states.index(now_s)][0] + transmatCost(now_s, next_s) + emmisionCost(next_s, next_ob, sc, frets, tf)
             if p < U[states.index(next_s)][0]:
                 U[states.index(next_s)] = (p,T[states.index(now_s)][1]+[next_s])
-    # print("U: {}\n".format(U))
     return U
 
 # データ成形
@@ -329,4 +351,3 @@ def Viterbi_guitar(Input):
         inp += 1
     
     return res
-            

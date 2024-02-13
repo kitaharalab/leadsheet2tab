@@ -33,11 +33,11 @@ def make_many_states(state, ttf, fin):
 def add_sound(fin, dim):
     # 押弦していない指を押弦可能な位置に新しく置くようにする
     res = []
-    if fin[4] == (0,0,0):
-        # 小指がフリー
+    if fin[4] == (0,0,0):# 小指がフリー
         rf = fin[3]# 薬指の指情報
-        for lf in range(1, rf[0]):
-            new_fin = make_new_fp(fin,[[],[],[],[],[4, lf, lf, rf[2]],[fin[-1]]])
+        s5, f5 = rf[0], rf[2]
+        for lf in range(1, s5):
+            new_fin = make_new_fp(fin,[[],[],[],[],[4, lf, lf, f5],[fin[-1]]])
             d = make6dim(new_fin)
             if d != dim and d not in res:
                 res.append(d)

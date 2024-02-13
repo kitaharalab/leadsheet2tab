@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 
 def make_xml(title, c_list):
-    path = "../kenkyu/XML/実験使用楽譜2/作成楽譜/"
+    path = "XML/"
     tree = ET.parse(path + title + ".musicxml")
     root = tree.getroot()# 最上階のタグを見れる
 

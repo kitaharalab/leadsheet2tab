@@ -108,8 +108,7 @@ def makeTabInfo(obserb, notes_list):
     print(">>Making Tablature...")
     st_marcov = t.perf_counter()
     while i <= len(notes_list)-1 and u <= len(Unshi)-1:
-        # print(Unshi[u], notes_list[i])
-        if type(notes_list[i]) == harmony.ChordSymbol:# コードシンボル
+        if type(notes_list[i]) == harmony.ChordSymbol:
             new_notes.append(notes_list[i])
         else:
             if Unshi[u][-1] == "note":
@@ -193,7 +192,6 @@ def main():
     
     score.metadata.title = Input.flat.metadata.title + "(変換後)"
     score.metadata.composer = Input.flat.metadata.composer
-    # score.metadata.lyricist = Input.flat.metadata.lyricist
     score.append(layout.ScoreLayout())
 
     score.write("musicxml", fp= path + score.metadata.title + ".musicxml")
